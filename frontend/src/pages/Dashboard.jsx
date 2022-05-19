@@ -1,62 +1,156 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import GoalForm from '../components/GoalForm'
-import GoalItem from '../components/GoalItem'
-import Spinner from '../components/Spinner'
-import { getGoals, reset } from '../features/goals/goalSlice'
+import { useEffect, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import Spinner from '../components/Spinner';
+import { createStyles, Navbar, Group, Code, Box, Avatar, Header } from '@mantine/core';
+import { Home as HomeIcon, Table as TableIcon, Logout } from 'tabler-icons-react';
+import Home from './home/Home';
+import Products from './products';
+import ProductGroups from './productGroups';
 
-function Dashboard() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+const data = [
+  { page: 'home', label: '首页', icon: HomeIcon, active: true },
+  { page: 'products', label: '资产', icon: TableIcon },
+  { page: 'productsGroups', label: '资产类型', icon: TableIcon },
+];
 
-  const { user } = useSelector((state) => state.auth)
-  const { goals, isLoading, isError, message } = useSelector(
-    (state) => state.goals
-  )
+const Dashboard = () => {
+  const { classes, cx } = useStyles();
+  const [active, setActive] = useState('Billing');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [nav, setNav] = useState('products');
+
+  const { user } = useSelector((state) => state.auth);
+  const { isLoading, isError, message } = useSelector((state) => state.product);
 
   useEffect(() => {
-    if (isError) {
-      console.log(message)
-    }
-
     if (!user) {
-      navigate('/login')
+      navigate('/login');
     }
+  }, [user]);
 
-    dispatch(getGoals())
+  // if (isLoading) {
+  //   return <Spinner />;
+  // }
+  const links = data.map((item) => (
+    <a
+      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
+      href={item.link}
+      key={item.label}
+      onClick={(event) => {
+        setNav(item.page);
+        setActive(item.label);
+      }}
+    >
+      <item.icon className={classes.linkIcon} />
+      <span>{item.label}</span>
+    </a>
+  ));
 
-    return () => {
-      dispatch(reset())
-    }
-  }, [user, navigate, isError, message, dispatch])
-
-  if (isLoading) {
-    return <Spinner />
-  }
+  const logout = () => {
+    console.log('logout');
+    localStorage.removeItem('user');
+    // navigate('/login');
+    window.location = '/login';
+  };
 
   return (
-    <>
-      <section className='heading'>
-        <h1>Welcome {user && user.name}</h1>
-        <p>Goals Dashboard</p>
-      </section>
+    <Box sx={{ display: 'flex' }}>
+      <Navbar height={window.innerHeight} width={{ sm: 270 }} p="md">
+        <Navbar.Section grow>
+          <Group className={classes.header} position="apart">
+            未来大厦资产管理系统
+            <Code sx={{ fontWeight: 700 }}>v1.0.0</Code>
+          </Group>
+          {links}
+        </Navbar.Section>
 
-      <GoalForm />
+        <Navbar.Section className={classes.footer}>
+          <a className={classes.link} onClick={logout}>
+            <Logout className={classes.linkIcon} />
+            <span>登出</span>
+          </a>
+        </Navbar.Section>
+      </Navbar>
 
-      <section className='content'>
-        {goals.length > 0 ? (
-          <div className='goals'>
-            {goals.map((goal) => (
-              <GoalItem key={goal._id} goal={goal} />
-            ))}
-          </div>
-        ) : (
-          <h3>You have not set any goals</h3>
-        )}
-      </section>
-    </>
-  )
-}
+      <Box sx={{ width: '100%' }}>
+        <Header
+          height="58px"
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            paddingRight: '16px',
+          }}
+        >
+          <Avatar src="https://avatars.githubusercontent.com/u/10353856?s=460&u=88394dfd67727327c1f7670a1764dc38a8a24831&v=4" />
+        </Header>
+        {/* {indexPage} */}
+        {nav === 'home' ? <Home /> : null}
+        {nav === 'products' ? <Products /> : null}
+        {nav === 'productsGroups' ? <ProductGroups /> : null}
+      </Box>
+    </Box>
+  );
+};
 
-export default Dashboard
+const useStyles = createStyles((theme, _params, getRef) => {
+  const icon = getRef('icon');
+  return {
+    header: {
+      paddingBottom: theme.spacing.md,
+      marginBottom: theme.spacing.md * 1.5,
+      borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`,
+    },
+
+    footer: {
+      paddingTop: theme.spacing.md,
+      marginTop: theme.spacing.md,
+      borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]}`,
+    },
+
+    link: {
+      ...theme.fn.focusStyles(),
+      display: 'flex',
+      alignItems: 'center',
+      textDecoration: 'none',
+      fontSize: theme.fontSizes.sm,
+      color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7],
+      padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
+      borderRadius: theme.radius.sm,
+      fontWeight: 500,
+      cursor: 'pointer',
+
+      '&:hover': {
+        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+        color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+
+        [`& .${icon}`]: {
+          color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+        },
+      },
+    },
+
+    linkIcon: {
+      ref: icon,
+      color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6],
+      marginRight: theme.spacing.sm,
+    },
+
+    linkActive: {
+      '&, &:hover': {
+        backgroundColor:
+          theme.colorScheme === 'dark'
+            ? theme.fn.rgba(theme.colors[theme.primaryColor][8], 0.25)
+            : theme.colors[theme.primaryColor][0],
+        color: theme.colorScheme === 'dark' ? theme.white : theme.colors[theme.primaryColor][7],
+        [`& .${icon}`]: {
+          color: theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 5 : 7],
+        },
+      },
+    },
+  };
+});
+
+export default Dashboard;
