@@ -20,6 +20,17 @@ export const createProduct = createAsyncThunk('products/create', async (productD
     return thunkAPI.rejectWithValue(message);
   }
 });
+// Update  product
+export const updateProduct = createAsyncThunk('products/update', async (productData, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.token;
+    return await productService.updateProduct(productData, token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
 
 // Get user products
 export const getProducts = createAsyncThunk('products/getAll', async (_, thunkAPI) => {

@@ -1,6 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { getProducts, createProduct, updateProduct } from '../../features/product/productSlice';
-import { createProductLogs } from '../../features/productLogs/productLogsSlice';
+import { getProductLogs, createProductLog } from '../../features/productLogs/productLogsSlice';
 import { getProductGroups } from '../../features/productGroup/productGroupSlice';
 import { useForm } from '@mantine/form';
 import { Card, TextInput, Grid, Select, Button, Group, createStyles } from '@mantine/core';
@@ -10,7 +9,6 @@ import moment from 'moment';
 import { useState, useRef } from 'react';
 import { showNotification } from '@mantine/notifications';
 import _ from 'lodash';
-import AddForm from './AddForm';
 import ReactDataGrid from '@inovua/reactdatagrid-community';
 import '@inovua/reactdatagrid-community/index.css';
 import { useProductColumns } from './columns';
@@ -27,19 +25,7 @@ const statusList = [
   { value: '2', label: '缺货' },
 ];
 
-const statusHandler = (status) => {
-  switch (status) {
-    case '0':
-      return '领取';
-    case '1':
-      return '借取';
-
-    default:
-      return '';
-  }
-};
-
-const Products = () => {
+const ProductLogs = () => {
   const { classes } = useStyles();
   const gridRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -96,43 +82,7 @@ const Products = () => {
     return `${window.innerHeight - 58 - 48 - 220}px`;
   }, [window.innerHeight]);
 
-  const createLog = async (data) => {
-    if (loading) return;
-    setLoading(true);
-    console.log('data: ', data);
-    const { _id, name, code, type, productType, num, used, left, user, manager, unit } = data;
-    const logData = {
-      name,
-      code,
-      productType,
-      type,
-      num,
-      user,
-      manager,
-      createDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-      updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-    };
-    const productData = {
-      _id,
-      used,
-      left,
-      updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-    };
-    const res = await dispatch(createProductLogs(logData));
-    const ret = await dispatch(updateProduct(productData));
-    if (!res.error && !ret.error) {
-      setLoading(false);
-      modals.closeModal('take-modal');
-      fetchData();
-      showNotification({
-        title: '操作成功：',
-        message: `${user}成功${statusHandler(type)}${num}${unit}${name}`,
-        color: 'green',
-      });
-    }
-  };
-
-  const columns = useProductColumns(createLog);
+  const columns = useProductColumns();
 
   const modals = useModals();
 
@@ -146,13 +96,12 @@ const Products = () => {
         setFilterValue(temp);
       }
     });
-    // console.log('products: ', dispatch(getProducts));
   }, []);
 
   const fetchData = async () => {
     if (loading) return;
     setLoading(true);
-    const res = await dispatch(getProducts());
+    const res = await dispatch(getProductLogs());
     if (res) {
       setLoading(false);
       setDataJson(res.payload);
@@ -169,32 +118,6 @@ const Products = () => {
     }
   };
 
-  const newData = async (data) => {
-    if (loading) return;
-    setLoading(true);
-    data['createDate'] = moment().format('YYYY-MM-DD HH:mm:ss');
-    data['updatedDate'] = moment().format('YYYY-MM-DD HH:mm:ss');
-    const res = await dispatch(createProduct(data));
-    if (!res.error && !res.payload.stack) {
-      setLoading(false);
-      modals.closeModal('add-modal');
-      fetchData();
-      showNotification({
-        title: '资产入库成功：',
-        message: `${data.name}已入库`,
-        color: 'green',
-      });
-    } else {
-      setLoading(false);
-      modals.closeModal('add-modal');
-      fetchData();
-      showNotification({
-        title: '资产入库失败：',
-        message: res.payload.stack,
-        color: 'red',
-      });
-    }
-  };
   return (
     <div className={classes.tableWrapper}>
       <Card shadow="sm" p="lg">
@@ -266,27 +189,6 @@ const Products = () => {
           >
             重置
           </Button>
-          <Button
-            size="xs"
-            onClick={() => {
-              modals.openModal({
-                id: 'add-modal',
-                title: '资产入库',
-                children: (
-                  <AddForm
-                    newData={newData}
-                    groups={groups.map((item) => {
-                      return { label: item.label, value: `${item.value}${item.code}` };
-                    })}
-                  />
-                ),
-              });
-            }}
-            loading={loading}
-          >
-            入库
-          </Button>
-          {/* <Button onClick={() => newData()}>add data</Button> */}
         </Group>
       </Card>
       <Card shadow="sm" mt={12} p={0}>
@@ -313,4 +215,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default ProductLogs;

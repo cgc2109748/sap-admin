@@ -15,6 +15,20 @@ const createProduct = async (ProductData, token) => {
   return response.data;
 };
 
+// Update user Product
+const updateProduct = async (ProductData, token) => {
+  const { _id } = ProductData;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(API_URL + _id, ProductData, config);
+
+  return response.data;
+};
+
 // Get user product
 const getProducts = async (token) => {
   const config = {
@@ -53,11 +67,12 @@ const queryProductByType = async (ProductData, token) => {
   return response.data;
 };
 
-const productervice = {
+const productService = {
   createProduct,
+  updateProduct,
   getProducts,
   deleteProduct,
   queryProductByType,
 };
 
-export default productervice;
+export default productService;

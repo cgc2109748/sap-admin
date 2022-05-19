@@ -6,11 +6,13 @@ import { createStyles, Navbar, Group, Code, Box, Avatar, Header } from '@mantine
 import { Home as HomeIcon, Table as TableIcon, Logout } from 'tabler-icons-react';
 import Home from './home/Home';
 import Products from './products';
+import ProductLogs from './productLogs';
 import ProductGroups from './productGroups';
 
 const data = [
   { page: 'home', label: '首页', icon: HomeIcon, active: true },
-  { page: 'products', label: '资产', icon: TableIcon },
+  { page: 'products', label: '资产台账', icon: TableIcon },
+  { page: 'productLogs', label: '资产使用台账', icon: TableIcon },
   { page: 'productsGroups', label: '资产类型', icon: TableIcon },
 ];
 
@@ -49,7 +51,6 @@ const Dashboard = () => {
   ));
 
   const logout = () => {
-    console.log('logout');
     localStorage.removeItem('user');
     // navigate('/login');
     window.location = '/login';
@@ -89,6 +90,7 @@ const Dashboard = () => {
         {/* {indexPage} */}
         {nav === 'home' ? <Home /> : null}
         {nav === 'products' ? <Products /> : null}
+        {nav === 'productLogs' ? <ProductLogs /> : null}
         {nav === 'productsGroups' ? <ProductGroups /> : null}
       </Box>
     </Box>

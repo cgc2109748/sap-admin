@@ -13,10 +13,10 @@ const getProducts = asyncHandler(async (req, res) => {
   res.status(200).json(products);
 });
 
-// @desc    Set Product
+// @desc    Create Product
 // @route   POST /api/products
 // @access  Private
-const setProduct = asyncHandler(async (req, res) => {
+const createProduct = asyncHandler(async (req, res) => {
   if (!req.body.name) {
     res.status(400);
     throw new Error('Please add a name field');
@@ -114,7 +114,7 @@ const queryProductByType = asyncHandler(async (req, res) => {
 
 module.exports = {
   getProducts,
-  setProduct,
+  createProduct,
   updateProduct,
   deleteProduct,
   queryProductByType,

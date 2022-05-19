@@ -1,4 +1,6 @@
 import { Text, Grid, Button } from '@mantine/core';
+import { useModals } from '@mantine/modals';
+import TakeForm from './takeForm';
 
 const statusHandler = (status) => {
   switch (status) {
@@ -43,7 +45,8 @@ function tranNumber(num, point) {
   }
 }
 
-export const useProductColumns = () => {
+export const useProductColumns = (createLog) => {
+  const modals = useModals();
   const columns = [
     {
       name: 'name',
@@ -119,7 +122,7 @@ export const useProductColumns = () => {
     },
     {
       name: 'updatedDate',
-      header: '入库日期',
+      header: '更新日期',
       sortable: false,
       defaultWidth: 160,
       render: ({ value, data }) => {
@@ -152,12 +155,31 @@ export const useProductColumns = () => {
       //   defaultLocked: 'end',
       //   defaultWidth: 250,
       type: 'number',
-      render: ({ value: data }) => {
+      render: ({ value, data }) => {
+        // console.debug('data:', data);
         return (
           <Grid>
-            <Grid.Col span={6}>
-              <Button size="xs">a</Button>
-            </Grid.Col>
+            {Number(data.left) > 0 && (
+              <Grid.Col span={6}>
+                <Button
+                  size="xs"
+                  onClick={() => {
+                    modals.openModal({
+                      id: 'take-modal',
+                      title: '资产领取',
+                      children: <TakeForm action={createLog} data={data} />,
+                    });
+                  }}
+                >
+                  领取
+                </Button>
+              </Grid.Col>
+            )}
+            {Number(data.left) > 0 && (
+              <Grid.Col span={6}>
+                <Button size="xs">借取</Button>
+              </Grid.Col>
+            )}
           </Grid>
         );
       },

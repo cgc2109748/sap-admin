@@ -25,15 +25,15 @@ const productSchema = mongoose.Schema(
     },
     used: {
       type: String,
-      required: [false, 'Please add a used value'],
+      required: false,
     },
     left: {
       type: String,
-      required: [false, 'Please add a left value'],
+      required: false,
     },
     unit: {
       type: String,
-      required: [false, 'Please add a unit value'],
+      required: false,
     },
     price: {
       type: String,
@@ -49,7 +49,7 @@ const productSchema = mongoose.Schema(
     },
     updatedDate: {
       type: String,
-      required: [false, 'Please add a updatedDate value'],
+      required: false,
     },
     manager: {
       type: String,
@@ -57,7 +57,11 @@ const productSchema = mongoose.Schema(
     },
     qrCode: {
       type: String,
-      required: [false, 'Please add a qrCode value'],
+      required: false,
+    },
+    amountOfBrrow: {
+      type: String,
+      required: false,
     },
   },
   {
