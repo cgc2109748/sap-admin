@@ -60,7 +60,7 @@ export const useProductColumns = () => {
       name: 'user',
       header: '资产使用人',
       sortable: false,
-      defaultWidth: 60,
+      defaultWidth: 100,
       render: ({ value, data }) => {
         return (
           <Text size="sm" color="#1c7ed6">
@@ -88,7 +88,7 @@ export const useProductColumns = () => {
       name: 'manager',
       header: '经办人',
       sortable: false,
-      defaultWidth: 60,
+      defaultWidth: 100,
       render: ({ value, data }) => {
         return (
           <Text size="sm" color="#1c7ed6">

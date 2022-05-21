@@ -145,13 +145,13 @@ const Products = () => {
   useEffect(() => {
     fetchData();
     fetchProductGroups();
-    document.addEventListener('keydown', (e) => {
-      if (e.keyCode === 13) {
-        const temp = _.pick(form.values, ['name', 'code', 'type', 'status']);
-        temp.type = !_.isEmpty(form.values.type) ? _.filter(groups, (item) => item.value === temp.type)[0].label : '';
-        setFilterValue(temp);
-      }
-    });
+    // document.addEventListener('keydown', (e) => {
+    //   if (e.keyCode === 13) {
+    //     const temp = _.pick(form.values, ['name', 'code', 'type', 'status']);
+    //     temp.type = !_.isEmpty(form.values.type) ? _.filter(groups, (item) => item.value === temp.type)[0].label : '';
+    //     setFilterValue(temp);
+    //   }
+    // });
     // console.log('products: ', dispatch(getProducts));
   }, []);
 

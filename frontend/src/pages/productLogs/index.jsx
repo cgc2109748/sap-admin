@@ -25,6 +25,13 @@ const statusList = [
   { value: '2', label: '缺货' },
 ];
 
+const useTypes = [
+  { value: '0', label: '领取' },
+  { value: '1', label: '借用' },
+  { value: '2', label: '归还' },
+  { value: '3', label: '补货' },
+];
+
 const ProductLogs = () => {
   const { classes } = useStyles();
   const gridRef = useRef(null);
@@ -52,13 +59,14 @@ const ProductLogs = () => {
     name: '',
     code: '',
     type: '',
-    status: '',
+    user: '',
+    manager: '',
   });
   const [dataJson, setDataJson] = useState([]);
   const [groups, setGroups] = useState([]);
 
   const filteredData = useMemo(() => {
-    const { name, code, type, status } = filterValue;
+    const { name, code, type, user, manager } = filterValue;
     console.log('filterValue:', filterValue);
     return _.chain(dataJson)
       .unionBy('_id')
@@ -72,10 +80,12 @@ const ProductLogs = () => {
         return _.isEmpty(type) || item.type.indexOf(type) >= 0;
       })
       .filter((item) => {
-        return _.isEmpty(status) || item.status.indexOf(status) >= 0;
+        return _.isEmpty(user) || item.user.indexOf(user) >= 0;
+      })
+      .filter((item) => {
+        return _.isEmpty(manager) || item.manager.indexOf(manager) >= 0;
       })
       .value();
-    // return dataJson;
   }, [dataJson, filterValue]);
 
   const tableHeight = useMemo(() => {
@@ -84,18 +94,16 @@ const ProductLogs = () => {
 
   const columns = useProductColumns();
 
-  const modals = useModals();
-
   useEffect(() => {
     fetchData();
     fetchProductGroups();
-    document.addEventListener('keydown', (e) => {
-      if (e.keyCode === 13) {
-        const temp = _.pick(form.values, ['name', 'code', 'type', 'status']);
-        temp.type = !_.isEmpty(form.values.type) ? _.filter(groups, (item) => item.value === temp.type)[0].label : '';
-        setFilterValue(temp);
-      }
-    });
+    // document.addEventListener('keydown', (e) => {
+    //   if (e.keyCode === 13) {
+    //     debugger;
+    //     const temp = _.pick(form.values, ['name', 'code', 'type', 'user', 'manager']);
+    //     setFilterValue(temp);
+    //   }
+    // });
   }, []);
 
   const fetchData = async () => {
@@ -136,22 +144,27 @@ const ProductLogs = () => {
                 {...form.getInputProps('code')}
                 style={{ width: '250px' }}
               />
+              <TextInput
+                label="使用人"
+                placeholder="使用人"
+                {...form.getInputProps('user')}
+                style={{ width: '250px' }}
+              />
+              <TextInput
+                label="经办人"
+                placeholder="经办人"
+                {...form.getInputProps('manager')}
+                style={{ width: '250px' }}
+              />
               {groups && (
                 <Select
-                  label="资产类型"
+                  label="使用类型"
                   placeholder="请选择"
-                  data={groups}
+                  data={useTypes}
                   {...form.getInputProps('type')}
                   style={{ width: '250px' }}
                 />
               )}
-              <Select
-                label="资产状态"
-                placeholder="请选择"
-                data={statusList}
-                {...form.getInputProps('status')}
-                style={{ width: '250px' }}
-              />
             </Group>
           </form>
         </Group>
@@ -160,10 +173,7 @@ const ProductLogs = () => {
             size="xs"
             loading={loading}
             onClick={() => {
-              const temp = _.pick(form.values, ['name', 'code', 'type', 'status']);
-              temp.type = !_.isEmpty(form.values.type)
-                ? _.filter(groups, (item) => item.value === temp.type)[0].label
-                : '';
+              const temp = _.pick(form.values, ['name', 'code', 'type', 'user', 'manager']);
               setFilterValue(temp);
             }}
           >
@@ -177,13 +187,15 @@ const ProductLogs = () => {
                 name: '',
                 code: '',
                 type: '',
-                status: '',
+                user: '',
+                manager: '',
               });
               setFilterValue({
                 name: '',
                 code: '',
                 type: '',
-                status: '',
+                user: '',
+                manager: '',
               });
             }}
           >
