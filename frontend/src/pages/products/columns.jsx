@@ -1,6 +1,9 @@
 import { Text, Grid, Button } from '@mantine/core';
 import { useModals } from '@mantine/modals';
-import TakeForm from './takeForm';
+import TakeForm from './TakeForm';
+import BorrowForm from './BorrowForm';
+import ReturnForm from './ReturnForm';
+import BuyForm from './BuyForm';
 
 const statusHandler = (status) => {
   switch (status) {
@@ -53,6 +56,7 @@ export const useProductColumns = (createLog) => {
       header: '资产名称',
       sortable: false,
       defaultWidth: 100,
+      defaultFlex: 1,
       render: ({ value, data }) => {
         return (
           <Text size="sm" color="#1c7ed6">
@@ -155,12 +159,13 @@ export const useProductColumns = (createLog) => {
       //   defaultLocked: 'end',
       //   defaultWidth: 250,
       type: 'number',
+      defaultWidth: 220,
       render: ({ value, data }) => {
         // console.debug('data:', data);
         return (
           <Grid>
             {Number(data.left) > 0 && (
-              <Grid.Col span={6}>
+              <Grid.Col span={4}>
                 <Button
                   size="xs"
                   onClick={() => {
@@ -176,8 +181,51 @@ export const useProductColumns = (createLog) => {
               </Grid.Col>
             )}
             {Number(data.left) > 0 && (
-              <Grid.Col span={6}>
-                <Button size="xs">借取</Button>
+              <Grid.Col span={4}>
+                <Button
+                  size="xs"
+                  onClick={() => {
+                    modals.openModal({
+                      id: 'borrow-modal',
+                      title: '资产借取',
+                      children: <BorrowForm action={createLog} data={data} />,
+                    });
+                  }}
+                >
+                  借取
+                </Button>
+              </Grid.Col>
+            )}
+            {Number(data.amountOfBrrow) > 0 && (
+              <Grid.Col span={4}>
+                <Button
+                  size="xs"
+                  onClick={() => {
+                    modals.openModal({
+                      id: 'return-modal',
+                      title: '资产归还',
+                      children: <ReturnForm action={createLog} data={data} />,
+                    });
+                  }}
+                >
+                  归还
+                </Button>
+              </Grid.Col>
+            )}
+            {Number(data.left) === 0 && (
+              <Grid.Col span={4}>
+                <Button
+                  size="xs"
+                  onClick={() => {
+                    modals.openModal({
+                      id: 'return-modal',
+                      title: '资产购置',
+                      children: <BuyForm action={createLog} data={data} />,
+                    });
+                  }}
+                >
+                  补货
+                </Button>
               </Grid.Col>
             )}
           </Grid>

@@ -9,16 +9,22 @@ const statusHandler = (status) => {
       );
     case '1':
       return (
-        <Badge color="blue" size="sm">
+        <Badge color="orange" size="sm">
           借取
         </Badge>
       );
-    // case '2':
-    //   return (
-    //     <Text color="red" size="sm">
-    //       归还
-    //     </Text>
-    //   );
+    case '2':
+      return (
+        <Badge color="green" size="sm">
+          归还
+        </Badge>
+      );
+    case '3':
+      return (
+        <Badge color="grape" size="sm">
+          归还
+        </Badge>
+      );
 
     default:
   }

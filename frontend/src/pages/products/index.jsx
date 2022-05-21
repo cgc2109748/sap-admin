@@ -100,7 +100,7 @@ const Products = () => {
     if (loading) return;
     setLoading(true);
     console.log('data: ', data);
-    const { _id, name, code, type, productType, num, used, left, user, manager, unit } = data;
+    const { _id, name, code, type, productType, num, used, left, user, manager, unit, amountOfBrrow, total } = data;
     const logData = {
       name,
       code,
@@ -112,12 +112,18 @@ const Products = () => {
       createDate: moment().format('YYYY-MM-DD HH:mm:ss'),
       updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
     };
-    const productData = {
+    let productData = {
       _id,
       used,
       left,
       updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
     };
+    if (!_.isNaN(parseInt(amountOfBrrow))) {
+      productData.amountOfBrrow = amountOfBrrow;
+    }
+    if (!_.isNaN(parseInt(total))) {
+      productData.total = total;
+    }
     const res = await dispatch(createProductLogs(logData));
     const ret = await dispatch(updateProduct(productData));
     if (!res.error && !ret.error) {

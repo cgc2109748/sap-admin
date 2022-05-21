@@ -6,6 +6,7 @@
   "dependencies": {
     "@inovua/reactdatagrid-community": "^4.19.5",
     "@mantine/core": "^4.2.5",
+    "@mantine/dropzone": "^4.2.5",
     "@mantine/form": "^4.2.5",
     "@mantine/hooks": "^4.2.5",
     "@mantine/next": "^4.2.5",
