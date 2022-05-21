@@ -1,30 +1,24 @@
-# Goalsetter MERN app
+# Goalsetter SAP-ADMIN app
 
-This is the goalsetter app from the [Learn the MERN Stack](https://www.youtube.com/watch?v=-0exw-9YJBo) series on YouTube.
+未来大厦资产管理系统
 
-## Usage
+## 使用注意
 
-Rename the .envexample to .env and add your MONGO_URI
+将 .envexample 重命名为 .env 并将您的mongo数据库链接添加到 MONGO_URI
 
-### Install dependencies
+### 依赖安装
 
 ```
-# Backend deps
+# 后端依赖安装
 npm install
 
-# Frontend deps
+# 前端依赖安装
 cd frontend
 npm install
 ```
 
-### Run Server
+### 服务运行
 
 ```
 npm run server
 ```
-
-## Demo
-
-I am not sure how long this will be up
-
-https://mernappbrad.herokuapp.com/
