@@ -1,6 +1,8 @@
-import { Group, Text, useMantineTheme, MantineTheme } from '@mantine/core';
+import { Group, Text, useMantineTheme, MantineTheme, Image, Button } from '@mantine/core';
 import { Upload, Photo, X, Icon as TablerIcon } from 'tabler-icons-react';
 import { Dropzone, DropzoneStatus, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { useState } from 'react';
+import _ from 'lodash';
 
 function getIconColor(status, theme) {
   return status.accepted
@@ -39,17 +41,36 @@ export const dropzoneChildren = (status, theme) => (
   </Group>
 );
 
-const FileUpload = () => {
+const FileUpload = (onDrop) => {
   const theme = useMantineTheme();
+  const [files, setFiles] = useState(null);
+  const [url, setUrl] = useState(null);
+
+  const onDropHandler = (files) => {
+    console.log('files: ', files);
+    setUrl(URL.createObjectURL(files[0]));
+    if (!_.isEmpty(onDrop)) {
+      onDrop(files[0]);
+    }
+  };
   return (
-    <Dropzone
-      onDrop={(files) => console.log('accepted files', files)}
-      onReject={(files) => console.log('rejected files', files)}
-      maxSize={3 * 1024 ** 2}
-      accept={IMAGE_MIME_TYPE}
-    >
-      {(status) => dropzoneChildren(status, theme)}
-    </Dropzone>
+    <>
+      {url ? (
+        <Group style={{ display: 'flex', justifyContent: 'start' }}>
+          <Image src={url} radius="md" alt="preview" height="120px" width="auto" />
+          <Button>上传</Button>
+        </Group>
+      ) : (
+        <Dropzone
+          onDrop={(files) => onDropHandler(files)}
+          onReject={(files) => console.log('rejected files', files)}
+          maxSize={3 * 1024 ** 2}
+          accept={IMAGE_MIME_TYPE}
+        >
+          {(status) => dropzoneChildren(status, theme)}
+        </Dropzone>
+      )}
+    </>
   );
 };
 

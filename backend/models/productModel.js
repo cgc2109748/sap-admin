@@ -6,6 +6,10 @@ const productSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add a name value'],
     },
+    img: {
+      type: String,
+      required: false,
+    },
     code: {
       type: String,
       required: [true, 'Please add a code value'],

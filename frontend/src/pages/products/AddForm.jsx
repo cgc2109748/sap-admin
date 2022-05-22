@@ -1,13 +1,14 @@
 import { useDispatch } from 'react-redux';
 import { useState, createContext } from 'react';
 import { useForm } from '@mantine/form';
-import { TextInput, NumberInput, Grid, Select, Button, Group } from '@mantine/core';
+import { TextInput, NumberInput, Grid, Select, Button, Group, Text } from '@mantine/core';
 import { queryProductByType } from '../../features/product/productSlice';
 import { showNotification } from '@mantine/notifications';
 import { DatePicker } from '@mantine/dates';
 import _ from 'lodash';
 import moment from 'moment';
 import FileUpload from '../../components/FileUpload';
+import { useModals } from '@mantine/modals';
 
 const FileUploadContext = createContext({});
 
@@ -15,6 +16,7 @@ const AddForm = (props) => {
   const [loading, setLoading] = useState(false);
   const [batchItems, setBatchItems] = useState([]);
   const dispatch = useDispatch();
+  const modals = useModals();
   const { groups, newData } = props;
   const form = useForm({
     initialValues: {
@@ -54,6 +56,7 @@ const AddForm = (props) => {
             <TextInput label="资产名称" placeholder="资产名称" {...form.getInputProps('name')} />
           </Grid.Col>
           <Grid.Col span={12}>
+            <Text mb={4}>产品图片</Text>
             <FileUpload />
           </Grid.Col>
           <Grid.Col span={12}>
@@ -180,7 +183,7 @@ const AddForm = (props) => {
           </Grid.Col>
         </Grid>
         <Group mt={8} position="right">
-          <Button size="xs" variant="outline">
+          <Button size="xs" variant="outline" onClick={() => modals.closeAll()}>
             取消
           </Button>
           <Button type="submit" size="xs">

@@ -7,10 +7,12 @@ import { showNotification } from '@mantine/notifications';
 import { DatePicker } from '@mantine/dates';
 import _ from 'lodash';
 import moment from 'moment';
+import { useModals } from '@mantine/modals';
 
 const TakeForm = (props) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const modals = useModals();
   const { action, data } = props;
   const form = useForm({
     initialValues: {
@@ -62,7 +64,7 @@ const TakeForm = (props) => {
         </Grid.Col>
       </Grid>
       <Group mt={8} position="right">
-        <Button size="xs" variant="outline">
+        <Button size="xs" variant="outline" onClick={() => modals.closeAll()}>
           取消
         </Button>
         <Button type="submit" size="xs">
