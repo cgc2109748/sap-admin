@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import Spinner from '../components/Spinner';
 import { createStyles, Navbar, Group, Code, Box, Avatar, Header } from '@mantine/core';
 import { Home as HomeIcon, Table as TableIcon, Logout } from 'tabler-icons-react';
 import Home from './home/Home';

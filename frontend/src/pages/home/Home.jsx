@@ -52,16 +52,15 @@ const useStyles = createStyles((theme) => ({
 function Home() {
   const { classes } = useStyles();
   return (
-    <div>
+    <div style={{ display: 'flex', height: '100%' }}>
       <Container>
         <div className={classes.inner}>
           <div className={classes.content}>
             <Title className={classes.title}>
-              A <span className={classes.highlight}>modern</span> React <br /> components library
+              <span className={classes.highlight}>未来</span> 大厦 <br /> 资产管理系统
             </Title>
             <Text color="dimmed" mt="md">
-              Build fully functional accessible web applications faster than ever – Mantine includes more than 120
-              customizable components and hooks to cover you in any situation
+              欢迎您使用本系统！👏
             </Text>
 
             <List
@@ -74,7 +73,7 @@ function Home() {
                 </ThemeIcon>
               }
             >
-              <List.Item>
+              {/* <List.Item>
                 <b>TypeScript based</b> – build type safe applications, all components and hooks export types
               </List.Item>
               <List.Item>
@@ -82,23 +81,19 @@ function Home() {
               </List.Item>
               <List.Item>
                 <b>No annoying focus ring</b> – focus ring will appear only when user navigates with keyboard
-              </List.Item>
+              </List.Item> */}
             </List>
 
-            <Group mt={30}>
+            {/* <Group mt={30}>
               <Button radius="xl" size="md" className={classes.control}>
                 Get started
               </Button>
               <Button variant="default" radius="xl" size="md" className={classes.control}>
                 Source code
               </Button>
-            </Group>
+            </Group> */}
           </div>
-          {/* eslint-disable-next-line jsx-a11y/alt-text */}
-          {/*<Image*/}
-          {/*  src={'https://ui.mantine.dev/_next/static/media/image.9a65bd94.svg'}*/}
-          {/*  className={classes.image}*/}
-          {/*/>*/}
+          <Image src={'https://ui.mantine.dev/_next/static/media/image.9a65bd94.svg'} className={classes.image} />
         </div>
       </Container>
     </div>

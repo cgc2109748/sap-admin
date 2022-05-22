@@ -25,15 +25,15 @@ function ImageUploadIcon({ status, ...props }) {
 }
 
 export const dropzoneChildren = (status, theme) => (
-  <Group position="center" spacing="xl" style={{ minHeight: 80, pointerEvents: 'none' }}>
+  <Group position="center" spacing="xl" style={{ minHeight: 120, pointerEvents: 'none' }}>
     <ImageUploadIcon status={status} style={{ color: getIconColor(status, theme) }} size={80} />
 
     <div>
       <Text size="xl" inline>
-        将图像拖至此处或单击以选择文件
+        将图片拖至此处或单击以选择文件
       </Text>
       <Text size="sm" color="dimmed" inline mt={7}>
-        每次入库只能选取一张图片, 每张图片不能超过 5mb
+        每次最多只能上传1个文件，每个文件不应超过 5mb
       </Text>
     </div>
   </Group>
