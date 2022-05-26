@@ -22,7 +22,7 @@ const statusHandler = (status) => {
     case '3':
       return (
         <Badge color="grape" size="sm">
-          归还
+          补货
         </Badge>
       );
 

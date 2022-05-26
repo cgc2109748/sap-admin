@@ -1,9 +1,10 @@
-import { Text, Grid, Button } from '@mantine/core';
+import { Text, Grid, Button, Image, Group, Anchor } from '@mantine/core';
 import { useModals } from '@mantine/modals';
 import TakeForm from './TakeForm';
 import BorrowForm from './BorrowForm';
 import ReturnForm from './ReturnForm';
 import BuyForm from './BuyForm';
+import QRCode from 'qrcode';
 
 const statusHandler = (status) => {
   switch (status) {
@@ -62,6 +63,51 @@ export const useProductColumns = (createLog) => {
           <Text size="sm" color="#1c7ed6">
             {value}
           </Text>
+        );
+      },
+    },
+    {
+      name: 'img',
+      header: '图片',
+      sortable: false,
+      defaultWidth: 60,
+      render: ({ value, data }) => {
+        return (
+          <Group position="center">
+            {value && (
+              <Image
+                height="36px"
+                radius="md"
+                alt="preview"
+                width="36px"
+                src={value}
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  modals.openConfirmModal({
+                    title: '预览',
+                    size: 800,
+                    closeOnClickOutside: false,
+                    children: (
+                      <Group position="center">
+                        <Image
+                          height="auto"
+                          radius="md"
+                          alt="preview"
+                          width="100%"
+                          src={value}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      </Group>
+                    ),
+                    labels: {
+                      confirm: '确认',
+                      cancel: '取消',
+                    },
+                  });
+                }}
+              />
+            )}
+          </Group>
         );
       },
     },
@@ -151,6 +197,43 @@ export const useProductColumns = (createLog) => {
       header: '二维码',
       sortable: false,
       defaultWidth: 60,
+      render: ({ value, data }) => {
+        return (
+          <Group position="center">
+            <Anchor
+              size="sm"
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                QRCode.toDataURL(data.code).then((res) => {
+                  modals.openConfirmModal({
+                    title: '预览',
+                    size: 800,
+                    closeOnClickOutside: false,
+                    children: (
+                      <Group position="center">
+                        <Image
+                          height="auto"
+                          radius="md"
+                          alt="preview"
+                          width="100%"
+                          src={res}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      </Group>
+                    ),
+                    labels: {
+                      confirm: '确认',
+                      cancel: '取消',
+                    },
+                  });
+                });
+              }}
+            >
+              查看
+            </Anchor>
+          </Group>
+        );
+      },
     },
     {
       name: '_id',

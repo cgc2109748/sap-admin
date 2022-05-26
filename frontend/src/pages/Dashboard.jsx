@@ -17,10 +17,10 @@ const data = [
 
 const Dashboard = () => {
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState('Billing');
+  const [active, setActive] = useState('home');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [nav, setNav] = useState('products');
+  const [nav, setNav] = useState('home');
 
   const { user } = useSelector((state) => state.auth);
   const { isLoading, isError, message } = useSelector((state) => state.product);
@@ -36,12 +36,12 @@ const Dashboard = () => {
   // }
   const links = data.map((item) => (
     <a
-      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
+      className={cx(classes.link, { [classes.linkActive]: item.page === active })}
       href={item.link}
-      key={item.label}
+      key={item.page}
       onClick={(event) => {
         setNav(item.page);
-        setActive(item.label);
+        setActive(item.page);
       }}
     >
       <item.icon className={classes.linkIcon} />

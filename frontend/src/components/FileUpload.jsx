@@ -1,8 +1,12 @@
 import { Group, Text, useMantineTheme, MantineTheme, Image, Button } from '@mantine/core';
 import { Upload, Photo, X, Icon as TablerIcon } from 'tabler-icons-react';
 import { Dropzone, DropzoneStatus, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { useState } from 'react';
+import { useForm } from '@mantine/form';
+import { useState, useContext } from 'react';
 import _ from 'lodash';
+import axios from 'axios';
+import { FileUploadContext } from '../pages/products/AddForm';
+import { showNotification } from '@mantine/notifications';
 
 function getIconColor(status, theme) {
   return status.accepted
@@ -43,22 +47,51 @@ export const dropzoneChildren = (status, theme) => (
 
 const FileUpload = (onDrop) => {
   const theme = useMantineTheme();
-  const [files, setFiles] = useState(null);
+  const [file, setFile] = useState(null);
   const [url, setUrl] = useState(null);
 
+  const { imageUrl, setImageUrl } = useContext(FileUploadContext);
+
+  const form = useForm({
+    initialValues: {
+      file: null,
+    },
+  });
+
   const onDropHandler = (files) => {
-    console.log('files: ', files);
+    setFile(files[0]);
     setUrl(URL.createObjectURL(files[0]));
     if (!_.isEmpty(onDrop)) {
-      onDrop(files[0]);
+      onDrop(files[0].file);
     }
+  };
+
+  const upload = () => {
+    const formData = new FormData();
+    formData.append('file', file);
+    console.log('file: ', file);
+    axios
+      .post('/api/upload', formData, {
+        header: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        if (res.data.code === 200) {
+          setImageUrl(res.data.url);
+          showNotification({
+            title: '上传成功！',
+            color: 'green',
+          });
+        }
+      });
   };
   return (
     <>
       {url ? (
         <Group style={{ display: 'flex', justifyContent: 'start' }}>
           <Image src={url} radius="md" alt="preview" height="120px" width="auto" />
-          <Button>上传</Button>
+          <Button onClick={upload}>上传</Button>
         </Group>
       ) : (
         <Dropzone

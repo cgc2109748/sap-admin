@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useState, createContext } from 'react';
+import { useState, createContext, useEffect } from 'react';
 import { useForm } from '@mantine/form';
 import { TextInput, NumberInput, Grid, Select, Button, Group, Text } from '@mantine/core';
 import { queryProductByType } from '../../features/product/productSlice';
@@ -10,17 +10,18 @@ import moment from 'moment';
 import FileUpload from '../../components/FileUpload';
 import { useModals } from '@mantine/modals';
 
-const FileUploadContext = createContext({});
+export const FileUploadContext = createContext({});
 
 const AddForm = (props) => {
   const [loading, setLoading] = useState(false);
-  const [batchItems, setBatchItems] = useState([]);
   const dispatch = useDispatch();
   const modals = useModals();
   const { groups, newData } = props;
+  const [imageUrl, setImageUrl] = useState('');
   const form = useForm({
     initialValues: {
       name: '',
+      img: '',
       type: '',
       code: '',
       total: '',
@@ -43,9 +44,16 @@ const AddForm = (props) => {
     }
   };
 
+  useEffect(() => {
+    form.setValues({
+      ...form.values,
+      img: imageUrl,
+    });
+  }, [imageUrl]);
+
   const value = {
-    batchItems,
-    setBatchItems,
+    imageUrl,
+    setImageUrl,
   };
 
   return (
@@ -74,15 +82,15 @@ const AddForm = (props) => {
                   const res = await dispatch(queryProductByType({ type: type }));
                   if (!res.error) {
                     let num = '';
-                    switch (res.payload.length) {
+                    switch (String(res.payload.length).length) {
                       case 1:
-                        num = '000' + Number(res.payload.length) + 1;
+                        num = '000' + (Number(res.payload.length) + 1);
                         break;
                       case 2:
-                        num = '00' + Number(res.payload.length) + 1;
+                        num = '00' + (Number(res.payload.length) + 1);
                         break;
                       case 3:
-                        num = '0' + Number(res.payload.length) + 1;
+                        num = '0' + (Number(res.payload.length) + 1);
                         break;
                       case 4:
                         num = Number(res.payload.length) + 1;
