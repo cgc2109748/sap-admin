@@ -1,5 +1,6 @@
 const e = require('express');
 const asyncHandler = require('express-async-handler');
+const moment = require('moment');
 
 const Product = require('../models/productModel');
 // const User = require('../models/userModel')
@@ -65,8 +66,14 @@ const updateProduct = asyncHandler(async (req, res) => {
   //   res.status(401);
   //   throw new Error('User not authorized');
   // }
+  const data = {
+    ...req.body,
+    ...{
+      updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+    },
+  };
 
-  const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, {
+  const updatedProduct = await Product.findByIdAndUpdate(req.params.id, data, {
     new: true,
   });
 
@@ -113,10 +120,23 @@ const queryProductByType = asyncHandler(async (req, res) => {
   res.status(200).json(proucts);
 });
 
+// @desc    Query Product by code
+// @route   DELETE /api/queryProductByCode
+// @access  Private
+
+const queryProductByCode = asyncHandler(async (req, res) => {
+  const proucts = await Product.find({
+    code: req.body.code,
+  });
+
+  res.status(200).json(proucts);
+});
+
 module.exports = {
   getProducts,
   createProduct,
   updateProduct,
   deleteProduct,
   queryProductByType,
+  queryProductByCode,
 };

@@ -49,7 +49,7 @@ function tranNumber(num, point) {
   }
 }
 
-export const useProductColumns = (createLog) => {
+const useProductColumns = (createLog) => {
   const modals = useModals();
   const columns = [
     {
@@ -318,3 +318,5 @@ export const useProductColumns = (createLog) => {
   ];
   return columns;
 };
+
+export { statusHandler, useProductColumns };

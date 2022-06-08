@@ -1,5 +1,6 @@
 const e = require('express');
 const asyncHandler = require('express-async-handler');
+const moment = require('moment');
 
 const ProductLog = require('../models/productLogModel');
 // const User = require('../models/userModel')
@@ -30,8 +31,10 @@ const setProductLog = asyncHandler(async (req, res) => {
     num: req.body.num,
     user: req.body.user,
     manager: req.body.manager,
-    createDate: req.body.createDate,
-    updatedDate: req.body.updatedDate,
+    // createDate: req.body.createDate,
+    // updatedDate: req.body.updatedDate,
+    createDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+    updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
   });
 
   res.status(200).json(productLog);

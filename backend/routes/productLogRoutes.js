@@ -9,8 +9,8 @@ const {
 
 const { protect } = require('../middleware/authMiddleware');
 
-router.route('/').get(protect, getProductLogs);
-router.route('/create').post(protect, setProductLog);
+router.route('/').get(getProductLogs);
+router.route('/create').post(setProductLog);
 router.route('/:id').delete(protect, deleteProductLog).put(protect, updateProductLog);
 
 module.exports = router;

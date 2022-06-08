@@ -14,6 +14,7 @@ import AddForm from './AddForm';
 import ReactDataGrid from '@inovua/reactdatagrid-community';
 import '@inovua/reactdatagrid-community/index.css';
 import { useProductColumns } from './columns';
+import { exportExcel } from './utils';
 
 const useStyles = createStyles((theme) => ({
   tableWrapper: {
@@ -201,6 +202,12 @@ const Products = () => {
       });
     }
   };
+
+  const doExport = () => {
+    console.log('dataJson: ', dataJson);
+    exportExcel(dataJson);
+  };
+
   return (
     <div className={classes.tableWrapper}>
       <Card shadow="sm" p="lg">
@@ -292,7 +299,9 @@ const Products = () => {
           >
             入库
           </Button>
-          {/* <Button onClick={() => newData()}>add data</Button> */}
+          <Button size="xs" onClick={() => doExport()}>
+            导出Excel
+          </Button>
         </Group>
       </Card>
       <Card shadow="sm" mt={12} p={0}>
