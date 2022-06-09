@@ -47,6 +47,7 @@ export const dropzoneChildren = (status, theme) => (
 
 const FileUpload = (onDrop) => {
   const theme = useMantineTheme();
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
   const [url, setUrl] = useState(null);
 
@@ -67,6 +68,8 @@ const FileUpload = (onDrop) => {
   };
 
   const upload = () => {
+    if (loading) return;
+    setLoading(true);
     const formData = new FormData();
     formData.append('file', file);
     console.log('file: ', file);
@@ -83,7 +86,12 @@ const FileUpload = (onDrop) => {
             title: '上传成功！',
             color: 'green',
           });
+          setLoading(false);
         }
+      })
+      .catch((e) => {
+        console.error(e);
+        setLoading(false);
       });
   };
   return (
@@ -91,7 +99,9 @@ const FileUpload = (onDrop) => {
       {url ? (
         <Group style={{ display: 'flex', justifyContent: 'start' }}>
           <Image src={url} radius="md" alt="preview" height="120px" width="auto" />
-          <Button onClick={upload}>上传</Button>
+          <Button onClick={upload} loading={loading}>
+            上传
+          </Button>
         </Group>
       ) : (
         <Dropzone

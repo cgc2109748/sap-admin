@@ -76,7 +76,7 @@ const ProductGroups = () => {
                             setLoading(false);
                             showNotification({
                               title: '操作成功:',
-                              message: `${element.name}类别已删除！`,
+                              message: `${element.label}类别已删除！`,
                               color: 'green',
                             });
                             fetchData();
@@ -84,7 +84,7 @@ const ProductGroups = () => {
                             setLoading(false);
                             showNotification({
                               title: '操作失败:',
-                              message: `${element.name}类别删除失败！`,
+                              message: `${element.label}类别删除失败！`,
                               color: 'red',
                             });
                             fetchData();
@@ -130,14 +130,25 @@ const ProductGroups = () => {
   const newData = async (data) => {
     if (loading) return;
     setLoading(true);
-    const res = await dispatch(createProductGroup(data));
+    let code = '0000';
+    console.log('columns.length:', columns.length);
+    if (columns.length < 10) {
+      code = `000${columns.length + 1}`;
+    } else if (columns.length > 10 && columns.length < 100) {
+      code = `00${columns.length + 1}`;
+    } else if (columns.length > 100 && columns.length < 1000) {
+      code = `0${columns.length + 1}`;
+    } else if (columns.length > 1000) {
+      code = `${columns.length + 1}`;
+    }
+    const res = await dispatch(createProductGroup({ ...data, ...{ code } }));
     if (res) {
       setLoading(false);
       modals.closeModal('add-modal');
       fetchData();
       showNotification({
         title: '新增类型成功！',
-        message: `新增了一个名为 ${res.payload.name} 的类型。`,
+        message: `新增了一个名为 ${res.payload.label} 的类型。`,
         color: 'green',
       });
     }
