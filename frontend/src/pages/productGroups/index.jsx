@@ -1,15 +1,14 @@
 import { useDispatch } from 'react-redux';
 import {
   getProductGroups,
+  updateProductGroup,
   createProductGroup,
-  deleteProductGroup,
 } from '../../features/productGroup/productGroupSlice';
 import { useForm } from '@mantine/form';
 import {
   Card,
   TextInput,
   Grid,
-  Select,
   Table,
   Button,
   Group,
@@ -26,7 +25,6 @@ import { DatePicker } from '@mantine/dates';
 import moment from 'moment';
 import { useState } from 'react';
 import { showNotification } from '@mantine/notifications';
-import _ from 'lodash';
 import { Trash } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
@@ -46,60 +44,66 @@ const ProductGroups = () => {
     if (columns.length > 0) {
       return (
         columns.length > 0 &&
-        columns.map((element, idx) => (
-          <tr key={element.idx}>
-            <td>
-              <Anchor size="sm" onClick={(event) => event.preventDefault()}>
-                {element.label}
-              </Anchor>
-            </td>
-            <td>{element.value}</td>
-            <td>{element.code}</td>
-            <td>{element.createDate}</td>
-            <td>
-              <Grid>
-                <Grid.Col span={6}>
-                  <ActionIcon
-                    size="xs"
-                    color="red"
-                    onClick={() => {
-                      modals.openConfirmModal({
-                        title: '警告！',
-                        children: <Text>{`确认删除${element.label}类别吗？确认删除后数据将无法恢复！`}</Text>,
-                        labels: { confirm: '确认删除', cancel: '取消' },
-                        onConfirm: async () => {
-                          console.log('element: ', element);
-                          if (loading) return;
-                          setLoading(true);
-                          const res = await dispatch(deleteProductGroup(element._id));
-                          if (!res.error) {
-                            setLoading(false);
-                            showNotification({
-                              title: '操作成功:',
-                              message: `${element.label}类别已删除！`,
-                              color: 'green',
-                            });
-                            fetchData();
-                          } else {
-                            setLoading(false);
-                            showNotification({
-                              title: '操作失败:',
-                              message: `${element.label}类别删除失败！`,
-                              color: 'red',
-                            });
-                            fetchData();
-                          }
-                        },
-                      });
-                    }}
-                  >
-                    <Trash />
-                  </ActionIcon>
-                </Grid.Col>
-              </Grid>
-            </td>
-          </tr>
-        ))
+        columns.map((element, idx) => {
+          if (!element._deleted) {
+            return (
+              <tr key={idx}>
+                <td>
+                  <Anchor size="sm" onClick={(event) => event.preventDefault()}>
+                    {element.label}
+                  </Anchor>
+                </td>
+                <td>{element.value}</td>
+                <td>{element.code}</td>
+                <td>{moment(element.createDate).format('YYYY-MM-DD HH:mm:ss')}</td>
+                <td>
+                  <Grid>
+                    <Grid.Col span={6}>
+                      <ActionIcon
+                        size="xs"
+                        color="red"
+                        onClick={() => {
+                          modals.openConfirmModal({
+                            title: '警告！',
+                            children: <Text>{`确认删除${element.label}类别吗？确认删除后数据将无法恢复！`}</Text>,
+                            labels: { confirm: '确认删除', cancel: '取消' },
+                            onConfirm: async () => {
+                              console.log('element: ', element);
+                              if (loading) return;
+                              setLoading(true);
+                              const res = await dispatch(updateProductGroup({ _id: element._id, _deleted: true }));
+                              if (!res.error) {
+                                setLoading(false);
+                                showNotification({
+                                  title: '操作成功:',
+                                  message: `${element.label}类别已删除！`,
+                                  color: 'green',
+                                });
+                                fetchData();
+                              } else {
+                                setLoading(false);
+                                showNotification({
+                                  title: '操作失败:',
+                                  message: `${element.label}类别删除失败！`,
+                                  color: 'red',
+                                });
+                                fetchData();
+                              }
+                            },
+                          });
+                        }}
+                      >
+                        <Trash />
+                      </ActionIcon>
+                    </Grid.Col>
+                  </Grid>
+                </td>
+              </tr>
+            );
+          } else {
+            return null;
+          }
+        })
       );
     } else {
       return null;
@@ -152,12 +156,6 @@ const ProductGroups = () => {
         color: 'green',
       });
     }
-  };
-
-  const p1 = {
-    label: '',
-    value: '',
-    createDate: '',
   };
 
   return (

@@ -1,4 +1,4 @@
-import { Text, Badge, Button } from '@mantine/core';
+import { Text, Badge } from '@mantine/core';
 const statusHandler = (status) => {
   switch (status) {
     case '0':

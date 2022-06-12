@@ -1,6 +1,7 @@
 const e = require('express');
 const asyncHandler = require('express-async-handler');
 const moment = require('moment');
+const _ = require('lodash');
 
 const Product = require('../models/productModel');
 // const User = require('../models/userModel')
@@ -66,12 +67,24 @@ const updateProduct = asyncHandler(async (req, res) => {
   //   res.status(401);
   //   throw new Error('User not authorized');
   // }
-  const data = {
+  let data = {
     ...req.body,
     ...{
       updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
     },
   };
+  if (!_.isUndefined(data.used) && !_.isUndefined(data.left)) {
+    if (Number(data.used) === 0) {
+      data.status = '0';
+    } else if (Number(data.left === 0)) {
+      data.status = '2';
+    } else {
+      data.status = '1';
+    }
+    // console.log('used:', data.used);
+    // console.log('left:', data.left);
+    // console.log('data:', data);
+  }
 
   const updatedProduct = await Product.findByIdAndUpdate(req.params.id, data, {
     new: true,

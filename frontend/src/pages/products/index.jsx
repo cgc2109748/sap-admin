@@ -78,6 +78,9 @@ const Products = () => {
     return _.chain(dataJson)
       .unionBy('_id')
       .filter((item) => {
+        return !item._deleted;
+      })
+      .filter((item) => {
         return _.isEmpty(name) || item.name.indexOf(name) >= 0;
       })
       .filter((item) => {
@@ -139,7 +142,19 @@ const Products = () => {
     }
   };
 
-  const columns = useProductColumns(createLog);
+  const deleteProduct = async (_id) => {
+    const res = await dispatch(updateProduct({ _id, _deleted: true }));
+    if (!res.error) {
+      console.log('res:', res);
+      showNotification({
+        title: '操作成功：',
+        message: `删除${res}`,
+        color: 'green',
+      });
+    }
+  };
+
+  const columns = useProductColumns(createLog, deleteProduct);
 
   const modals = useModals();
 

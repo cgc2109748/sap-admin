@@ -14,6 +14,10 @@ const productGroupSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add a code value'],
     },
+    _deleted: {
+      type: Boolean,
+      required: false,
+    },
     createDate: {
       type: String,
       required: [true, 'Please add a createDate value'],

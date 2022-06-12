@@ -28,6 +28,20 @@ const getProductGroups = async (token) => {
   return response.data;
 };
 
+// Update user ProductGroup
+const updateProductGroup = async (ProductGroupData, token) => {
+  const { _id } = ProductGroupData;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(API_URL + _id, ProductGroupData, config);
+
+  return response.data;
+};
+
 // Delete user ProductGroup
 const deleteProductGroup = async (ProductGroupId, token) => {
   const config = {
@@ -44,6 +58,7 @@ const deleteProductGroup = async (ProductGroupId, token) => {
 const productGroupService = {
   createProductGroup,
   getProductGroups,
+  updateProductGroup,
   deleteProductGroup,
 };
 

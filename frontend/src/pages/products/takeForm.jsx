@@ -1,8 +1,5 @@
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
 import { useForm } from '@mantine/form';
-import { TextInput, NumberInput, Grid, Select, Button, Group } from '@mantine/core';
-import { queryProductByType } from '../../features/product/productSlice';
+import { TextInput, NumberInput, Grid, Button, Group } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { DatePicker } from '@mantine/dates';
 import _ from 'lodash';
@@ -10,8 +7,6 @@ import moment from 'moment';
 import { useModals } from '@mantine/modals';
 
 const TakeForm = (props) => {
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
   const modals = useModals();
   const { action, data } = props;
   const form = useForm({
@@ -30,10 +25,18 @@ const TakeForm = (props) => {
         result.productType = result.type;
         result = { ...result, ...values };
         result.type = '0';
-        result.used = Number(result.used) + Number(values.num);
-        result.left = Number(result.left) - Number(values.num);
-        console.log('result:', result);
-        action(result);
+        if (Number(result.left) - Number(values.num) > 0 || Number(result.left) - Number(values.num) === 0) {
+          result.used = Number(result.used) + Number(values.num);
+          result.left = Number(result.left) - Number(values.num);
+          console.log('result:', result);
+          action(result);
+        } else {
+          showNotification({
+            title: '资产领取失败',
+            message: '领取数量有误，请确认后再次领取！',
+            color: 'red',
+          });
+        }
       })}
     >
       <Grid>

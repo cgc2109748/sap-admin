@@ -49,7 +49,7 @@ function tranNumber(num, point) {
   }
 }
 
-const useProductColumns = (createLog) => {
+const useProductColumns = (createLog, deleteProduct) => {
   const modals = useModals();
   const columns = [
     {
@@ -311,6 +311,31 @@ const useProductColumns = (createLog) => {
                 </Button>
               </Grid.Col>
             )}
+            {data.status == '0' ? (
+              <Grid.Col span={4}>
+                <Button
+                  color="red"
+                  size="xs"
+                  onClick={() => {
+                    modals.openConfirmModal({
+                      id: 'delete-modal',
+                      title: '资产购置',
+                      children: <Text>数据删除后将无法恢复，确定删除吗？</Text>,
+                      labels: {
+                        confirm: '确定',
+                        cancel: '取消',
+                      },
+                      onCancel: () => modals.closeModal('delete-modal'),
+                      onConfirm: () => {
+                        deleteProduct(data._id);
+                      },
+                    });
+                  }}
+                >
+                  删除
+                </Button>
+              </Grid.Col>
+            ) : null}
           </Grid>
         );
       },
