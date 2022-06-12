@@ -5,7 +5,7 @@ const { protect } = require('../middleware/authMiddleware');
 const fs = require('fs');
 const moment = require('moment');
 
-const serverUrl = process.env.SERVER_URL;
+const fileUrl = process.env.FILE_URL;
 const nowDate = moment().format('YYYYMMDDHHmmss');
 
 router.post('/', upload, (req, res) => {
@@ -29,7 +29,7 @@ router.post('/', upload, (req, res) => {
     // res.end('上传成功!');
     res.status(200).json({
       code: 200,
-      url: `${serverUrl}/uploads/${nowDate}_${file.originalname}`,
+      url: `${fileUrl}/uploads/${nowDate}_${file.originalname}`,
       message: '上传成功！',
     });
   }
