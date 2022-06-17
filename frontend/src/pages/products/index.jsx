@@ -145,12 +145,13 @@ const Products = () => {
   const deleteProduct = async (_id) => {
     const res = await dispatch(updateProduct({ _id, _deleted: true }));
     if (!res.error) {
-      console.log('res:', res);
+      // console.log('res:', res);
       showNotification({
         title: '操作成功：',
         message: `删除${res}`,
         color: 'green',
       });
+      fetchData();
     }
   };
 
@@ -219,8 +220,16 @@ const Products = () => {
   };
 
   const doExport = () => {
-    console.log('dataJson: ', dataJson);
-    exportExcel(dataJson);
+    const data = _.chain(dataJson)
+      .map((item) => {
+        if (!item._deleted) {
+          return item;
+        }
+      })
+      .compact()
+      .value(_);
+    console.log('dataJson: ', data);
+    exportExcel(data);
   };
 
   return (
