@@ -188,7 +188,15 @@ const Products = () => {
     const res = await dispatch(getProductGroups());
     if (res) {
       setLoading(false);
-      setGroups(res.payload);
+      const data = _.chain(res.payload)
+        .map((item) => {
+          if (!item._deleted) {
+            return item;
+          }
+        })
+        .compact()
+        .value();
+      setGroups(data);
     }
   };
 

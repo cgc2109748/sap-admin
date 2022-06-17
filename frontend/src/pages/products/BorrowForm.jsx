@@ -28,7 +28,8 @@ const BorrowForm = (props) => {
         if (Number(result.left) - Number(values.num) > 0 || Number(result.left) - Number(values.num) === 0) {
           result.used = Number(result.used) + Number(values.num);
           result.left = Number(result.left) - Number(values.num);
-          result.amountOfBrrow = Number(values.num) + Number(data.amountOfBrrow);
+          result.amountOfBrrow =
+            Number(values.num) + (_.isNaN(Number(data.amountOfBrrow)) ? 0 : Number(data.amountOfBrrow));
           console.log('result:', result);
           action(result);
         } else {
