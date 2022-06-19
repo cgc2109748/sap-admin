@@ -1,6 +1,6 @@
 {
   "name": "sap-admin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Goalsetter app for youtube tutorial",
   "main": "server.js",
   "scripts": {
