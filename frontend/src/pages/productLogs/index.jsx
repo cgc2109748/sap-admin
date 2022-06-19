@@ -61,12 +61,13 @@ const ProductLogs = () => {
     type: '',
     user: '',
     manager: '',
+    productType: ''
   });
   const [dataJson, setDataJson] = useState([]);
   const [groups, setGroups] = useState([]);
 
   const filteredData = useMemo(() => {
-    const { name, code, type, user, manager } = filterValue;
+    const { name, code, type, user, manager, productType } = filterValue;
     console.log('filterValue:', filterValue);
     return _.chain(dataJson)
       .unionBy('_id')
@@ -84,6 +85,9 @@ const ProductLogs = () => {
       })
       .filter((item) => {
         return _.isEmpty(manager) || item.manager.indexOf(manager) >= 0;
+      })
+      .filter((item) => {
+        return _.isEmpty(productType) || item.productType.indexOf(productType) >= 0;
       })
       .value();
   }, [dataJson, filterValue]);
@@ -156,7 +160,7 @@ const ProductLogs = () => {
                 {...form.getInputProps('manager')}
                 style={{ width: '250px' }}
               />
-              {groups && (
+              {useTypes && (
                 <Select
                   label="使用类型"
                   placeholder="请选择"
@@ -164,6 +168,16 @@ const ProductLogs = () => {
                   {...form.getInputProps('type')}
                   style={{ width: '250px' }}
                 />
+              )}
+              {groups &&  (
+                <Select
+                  label="资产类型"
+                  placeholder="请选择"
+                  data={groups}
+                  {...form.getInputProps('productType')}
+                  style={{ width: '250px' }}
+                />
+                
               )}
             </Group>
           </form>
@@ -174,6 +188,11 @@ const ProductLogs = () => {
             loading={loading}
             onClick={() => {
               const temp = _.pick(form.values, ['name', 'code', 'type', 'user', 'manager']);
+              _.forEach(groups, (item) => {
+                if (item.value === form.values['productType']) {
+                  temp['productType'] = item.label
+                }
+              })
               setFilterValue(temp);
             }}
           >
@@ -189,6 +208,7 @@ const ProductLogs = () => {
                 type: '',
                 user: '',
                 manager: '',
+                productType:'',
               });
               setFilterValue({
                 name: '',
@@ -196,6 +216,7 @@ const ProductLogs = () => {
                 type: '',
                 user: '',
                 manager: '',
+                productType: '',
               });
             }}
           >
