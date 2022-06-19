@@ -1,41 +1,10 @@
 import ExcelJs from 'exceljs';
 import moment from 'moment';
-import _ from 'lodash';
 
-const statusHandler = (status) => {
-  switch (status) {
-    case '0':
-      return '闲置';
-    case '1':
-      return '在用';
-    case '2':
-      return '缺货';
-    default:
-      return '';
-  }
-};
+export const exportExcel = (formatData, customFileName) => {
+  
 
-export const exportExcel = (data) => {
-  const formatData = data.map((item) => {
-    return {
-      资产名称: item.name,
-      资产编码: item.code,
-      资产类型: item.type,
-      资产状态: statusHandler(item.status),
-      资产数量: item.total,
-      使用数量: item.used,
-      剩余数量: item.left,
-      单位: item.unit,
-      单价: item.price,
-      总价: item.totalPrice,
-      更新日期: item.updatedDate,
-      管理人: item.manager,
-    };
-  });
-
-  console.log('formatData:', formatData);
-
-  let sheetName = '资产情况.xlsx';
+  let sheetName = `${customFileName ? customFileName :'资产情况'}.xlsx`
   let headerName = 'RequestsList';
 
   // 获取sheet对象，设置当前sheet的样式
@@ -66,7 +35,7 @@ export const exportExcel = (data) => {
       showFirstColumn: true,
       width: 200,
     },
-    columns: [{ name: '资产情况' }],
+    columns: [{ name: customFileName ? customFileName : '资产情况' }],
     rows: [[`更新于: ${moment().format('YYYY-MM-DD HH:mm:ss')}`]],
   });
 
