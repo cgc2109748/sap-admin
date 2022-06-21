@@ -48,7 +48,7 @@ const productSchema = mongoose.Schema(
     },
     createDate: {
       type: String,
-      required: [true, 'Please add a createDate value'],
+      required: false,
     },
     updatedDate: {
       type: String,

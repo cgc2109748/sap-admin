@@ -83,6 +83,9 @@ const AddForm = (props) => {
                   if (!res.error) {
                     let num = '';
                     switch (String(res.payload.length).length) {
+                      case 0:
+                        num = '0001';
+                        break;
                       case 1:
                         num = '000' + (Number(res.payload.length) + 1);
                         break;

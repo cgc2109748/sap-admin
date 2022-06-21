@@ -37,8 +37,10 @@ const createProduct = asyncHandler(async (req, res) => {
     used: '0',
     left: req.body.total,
     manager: req.body.manager,
-    createDate: req.body.createDate,
-    updatedDate: req.body.updatedDate,
+    // createDate: req.body.createDate,
+    // updatedDate: req.body.updatedDate,
+    createDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+    updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
     // qrCode: req.body.qrCode,
   });
 

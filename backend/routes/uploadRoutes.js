@@ -27,6 +27,7 @@ router.post('/', upload, (req, res) => {
     });
 
     // res.end('上传成功!');
+    console.log('fileUrl:', fileUrl);
     res.status(200).json({
       code: 200,
       url: `${fileUrl}/uploads/${nowDate}_${file.originalname}`,
