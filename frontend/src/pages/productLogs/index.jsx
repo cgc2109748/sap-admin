@@ -1,29 +1,21 @@
 import { useDispatch } from 'react-redux';
-import { getProductLogs, createProductLog } from '../../features/productLogs/productLogsSlice';
+import { getProductLogs } from '../../features/productLogs/productLogsSlice';
 import { getProductGroups } from '../../features/productGroup/productGroupSlice';
 import { useForm } from '@mantine/form';
 import { Card, TextInput, Grid, Select, Button, Group, createStyles } from '@mantine/core';
 import { useMemo, useEffect } from 'react';
-import { useModals } from '@mantine/modals';
-import moment from 'moment';
 import { useState, useRef } from 'react';
-import { showNotification } from '@mantine/notifications';
 import _ from 'lodash';
 import ReactDataGrid from '@inovua/reactdatagrid-community';
 import '@inovua/reactdatagrid-community/index.css';
 import { useProductColumns } from './columns';
+import { exportExcel } from '../products/utils';
 
 const useStyles = createStyles((theme) => ({
   tableWrapper: {
     padding: '16px',
   },
 }));
-
-const statusList = [
-  { value: '0', label: '闲置' },
-  { value: '1', label: '在用' },
-  { value: '2', label: '缺货' },
-];
 
 const useTypes = [
   { value: '0', label: '领取' },
@@ -61,12 +53,13 @@ const ProductLogs = () => {
     type: '',
     user: '',
     manager: '',
+    productType: ''
   });
   const [dataJson, setDataJson] = useState([]);
   const [groups, setGroups] = useState([]);
 
   const filteredData = useMemo(() => {
-    const { name, code, type, user, manager } = filterValue;
+    const { name, code, type, user, manager, productType } = filterValue;
     console.log('filterValue:', filterValue);
     return _.chain(dataJson)
       .unionBy('_id')
@@ -84,6 +77,9 @@ const ProductLogs = () => {
       })
       .filter((item) => {
         return _.isEmpty(manager) || item.manager.indexOf(manager) >= 0;
+      })
+      .filter((item) => {
+        return _.isEmpty(productType) || item.productType.indexOf(productType) >= 0;
       })
       .value();
   }, [dataJson, filterValue]);
@@ -126,6 +122,52 @@ const ProductLogs = () => {
     }
   };
 
+  const doExport = () => {
+    const data = _.chain(dataJson)
+      .map((item) => {
+        if (!item._deleted) {
+          return item;
+        }
+      })
+      .compact()
+      .value(_);
+    console.log('dataJson: ', data);
+    const productTypeHandler = (productType) => {
+      let result = ''
+      _.forEach(groups, (item) => {
+        if (item.value === productType) {
+         result = item.label
+        }
+      })
+      return result
+    };
+
+    const useTypeHandler = (useType) => {
+      let result = ''
+      _.forEach(useTypes, (item) => {
+        if (item.value === useType) {
+          result = item.label
+        }
+      })
+      return result
+    }
+
+    const formatData = data.map((item) => {
+      return {
+        资产名称: item.name,
+        资产编码: item.code,
+        资产类型: item.productType,
+        资产使用人: item.user,
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        使用类型: useTypeHandler(item.type),
+        数量: item.num,
+        经办人: item.manager,
+        操作日期: item.updatedDate
+      };
+    });
+    exportExcel(formatData, '资产使用情况');
+  };
+
   return (
     <div className={classes.tableWrapper}>
       <Card shadow="sm" p="lg">
@@ -156,7 +198,7 @@ const ProductLogs = () => {
                 {...form.getInputProps('manager')}
                 style={{ width: '250px' }}
               />
-              {groups && (
+              {useTypes && (
                 <Select
                   label="使用类型"
                   placeholder="请选择"
@@ -164,6 +206,16 @@ const ProductLogs = () => {
                   {...form.getInputProps('type')}
                   style={{ width: '250px' }}
                 />
+              )}
+              {groups &&  (
+                <Select
+                  label="资产类型"
+                  placeholder="请选择"
+                  data={groups}
+                  {...form.getInputProps('productType')}
+                  style={{ width: '250px' }}
+                />
+                
               )}
             </Group>
           </form>
@@ -174,6 +226,11 @@ const ProductLogs = () => {
             loading={loading}
             onClick={() => {
               const temp = _.pick(form.values, ['name', 'code', 'type', 'user', 'manager']);
+              _.forEach(groups, (item) => {
+                if (item.value === form.values['productType']) {
+                  temp['productType'] = item.label
+                }
+              })
               setFilterValue(temp);
             }}
           >
@@ -189,6 +246,7 @@ const ProductLogs = () => {
                 type: '',
                 user: '',
                 manager: '',
+                productType:'',
               });
               setFilterValue({
                 name: '',
@@ -196,10 +254,14 @@ const ProductLogs = () => {
                 type: '',
                 user: '',
                 manager: '',
+                productType: '',
               });
             }}
           >
             重置
+          </Button>
+          <Button size="xs" onClick={() => doExport()}>
+            导出Excel
           </Button>
         </Group>
       </Card>
