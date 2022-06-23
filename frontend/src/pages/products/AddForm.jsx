@@ -9,6 +9,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import FileUpload from '../../components/FileUpload';
 import { useModals } from '@mantine/modals';
+import axios from 'axios';
 
 export const FileUploadContext = createContext({});
 
@@ -17,7 +18,8 @@ const AddForm = (props) => {
   const dispatch = useDispatch();
   const modals = useModals();
   const { groups, newData } = props;
-  const [imageUrl, setImageUrl] = useState('');
+  const [file, setFile] = useState(null);
+  // const [imageUrl, setImageUrl] = useState('');
   const form = useForm({
     initialValues: {
       name: '',
@@ -44,21 +46,52 @@ const AddForm = (props) => {
     }
   };
 
-  useEffect(() => {
-    form.setValues({
-      ...form.values,
-      img: imageUrl,
-    });
-  }, [imageUrl]);
+  // useEffect(() => {
+  //   form.setValues({
+  //     ...form.values,
+  //     img: imageUrl,
+  //   });
+  // }, [imageUrl]);
+
+  const upload = (values) => {
+    if (loading) return;
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    console.log('file: ', file);
+    axios
+      .post('/api/upload', formData, {
+        header: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        if (res.data.code === 200) {
+          // setImageUrl(res.data.url);
+          // showNotification({
+          //   title: '上传成功！',
+          //   color: 'green',
+          // });
+          newData({...values, ...{img: res.data.url}})
+          setLoading(false);
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        setLoading(false);
+      });
+  };
 
   const value = {
-    imageUrl,
-    setImageUrl,
+    file,
+    setFile,
+    // imageUrl,
+    // setImageUrl,
   };
 
   return (
     <FileUploadContext.Provider value={value}>
-      <form onSubmit={form.onSubmit((values) => newData(values))}>
+      <form onSubmit={form.onSubmit((values) => upload(values))}>
         <Grid>
           <Grid.Col span={12}>
             <TextInput label="资产名称" placeholder="资产名称" {...form.getInputProps('name')} />

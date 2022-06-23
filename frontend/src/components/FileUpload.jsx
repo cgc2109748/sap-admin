@@ -48,10 +48,12 @@ export const dropzoneChildren = (status, theme) => (
 const FileUpload = (onDrop) => {
   const theme = useMantineTheme();
   const [loading, setLoading] = useState(false);
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
   const [url, setUrl] = useState(null);
 
-  const { imageUrl, setImageUrl } = useContext(FileUploadContext);
+  const { file, setFile,
+    // imageUrl, setImageUrl
+  } = useContext(FileUploadContext);
 
   const form = useForm({
     initialValues: {
@@ -67,41 +69,41 @@ const FileUpload = (onDrop) => {
     }
   };
 
-  const upload = () => {
-    if (loading) return;
-    setLoading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-    console.log('file: ', file);
-    axios
-      .post('/api/upload', formData, {
-        header: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((res) => {
-        if (res.data.code === 200) {
-          setImageUrl(res.data.url);
-          showNotification({
-            title: '上传成功！',
-            color: 'green',
-          });
-          setLoading(false);
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        setLoading(false);
-      });
-  };
+  // const upload = () => {
+  //   if (loading) return;
+  //   setLoading(true);
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+  //   console.log('file: ', file);
+  //   axios
+  //     .post('/api/upload', formData, {
+  //       header: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     })
+  //     .then((res) => {
+  //       if (res.data.code === 200) {
+  //         setImageUrl(res.data.url);
+  //         showNotification({
+  //           title: '上传成功！',
+  //           color: 'green',
+  //         });
+  //         setLoading(false);
+  //       }
+  //     })
+  //     .catch((e) => {
+  //       console.error(e);
+  //       setLoading(false);
+  //     });
+  // };
   return (
     <>
       {url ? (
         <Group style={{ display: 'flex', justifyContent: 'start' }}>
           <Image src={url} radius="md" alt="preview" height="120px" width="auto" />
-          <Button onClick={upload} loading={loading}>
-            上传
-          </Button>
+          {/*<Button onClick={upload} loading={loading}>*/}
+          {/*  上传*/}
+          {/*</Button>*/}
         </Group>
       ) : (
         <Dropzone
