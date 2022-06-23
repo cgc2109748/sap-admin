@@ -12,7 +12,7 @@ const Product = require('../models/productModel');
 const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find();
 
-  res.status(200).json(products);
+  res.status(200).json(_.orderBy(products, ['updatedDate'], ['desc']));
 });
 
 // @desc    Create Product
