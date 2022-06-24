@@ -58,6 +58,7 @@ const useProductColumns = (createLog, deleteProduct) => {
       sortable: false,
       defaultWidth: 100,
       defaultFlex: 1,
+      userSelect: true,
       render: ({ value, data }) => {
         return (
           <Text size="sm" color="#1c7ed6">
@@ -115,12 +116,14 @@ const useProductColumns = (createLog, deleteProduct) => {
       name: 'code',
       header: '资产编码',
       sortable: true,
+      userSelect: true,
     },
     {
       name: 'type',
       header: '资产类型',
       defaultWidth: 100,
       sortable: false,
+      userSelect: true,
     },
     {
       name: 'status',
@@ -175,6 +178,7 @@ const useProductColumns = (createLog, deleteProduct) => {
       header: '更新日期',
       sortable: false,
       defaultWidth: 160,
+      userSelect: true,
       render: ({ value, data }) => {
         return <Text size="sm">{value}</Text>;
       },

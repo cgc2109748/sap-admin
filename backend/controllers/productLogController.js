@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler');
 const moment = require('moment');
 
 const ProductLog = require('../models/productLogModel');
+const _ = require('lodash');
 // const User = require('../models/userModel')
 
 // @desc    Get ProductLogs
@@ -11,7 +12,7 @@ const ProductLog = require('../models/productLogModel');
 const getProductLogs = asyncHandler(async (req, res) => {
   const productLogs = await ProductLog.find();
 
-  res.status(200).json(productLogs);
+  res.status(200).json(_.orderBy(productLogs, ['updatedDate'], ['desc']));
 });
 
 // @desc    Set ProductLog
