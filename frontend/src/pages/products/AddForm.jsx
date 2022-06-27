@@ -76,7 +76,13 @@ const AddForm = (props) => {
 
   return (
     <FileUploadContext.Provider value={value}>
-      <form onSubmit={form.onSubmit((values) => upload(values))}>
+      <form onSubmit={form.onSubmit((values) => {
+        if (!_.isEmpty(file)) {
+          upload(values)
+        } else {
+          newData(values)
+        }
+      })}>
         <Grid>
           <Grid.Col span={12}>
             <TextInput label="资产名称" placeholder="资产名称" {...form.getInputProps('name')} />
@@ -110,26 +116,6 @@ const AddForm = (props) => {
                     } else {
                       num = length
                     }
-                    // switch (res.payload.length + 1) {
-                    //   case 0:
-                    //     num = '0001';
-                    //     break;
-                    //   case 1:
-                    //     num = '000' + (Number(res.payload.length) + 1);
-                    //     break;
-                    //   case 2:
-                    //     num = '00' + (Number(res.payload.length) + 1);
-                    //     break;
-                    //   case 3:
-                    //     num = '0' + (Number(res.payload.length) + 1);
-                    //     break;
-                    //   case 4:
-                    //     num = Number(res.payload.length) + 1;
-                    //     break;
-                    //   default:
-                    //     num = '0000';
-                    //     break;
-                    // }
                     form.setValues({
                       ...form.values,
                       type: type,

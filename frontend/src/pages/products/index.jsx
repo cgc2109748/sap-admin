@@ -203,6 +203,18 @@ const Products = () => {
   const newData = async (data) => {
     if (loading) return;
     setLoading(true);
+    if (data.status === '1') {
+      const left = Number(data?.total) - Number(data?.used)
+      if (left > 0) {
+        data['left'] = left
+      } else {
+        showNotification({
+          title: '资产入库失败：',
+          message: '使用数量不能大于资产数量',
+          color: 'red',
+        });
+      }
+    }
     data['createDate'] = moment().format('YYYY-MM-DD HH:mm:ss');
     data['updatedDate'] = moment().format('YYYY-MM-DD HH:mm:ss');
     const res = await dispatch(createProduct(data));

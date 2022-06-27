@@ -24,6 +24,11 @@ const createProduct = asyncHandler(async (req, res) => {
     throw new Error('Please add a name field');
   }
 
+  if (Number(req.body.total) - Number(req.body.used) < 0) {
+    res.status(400)
+    throw new Error('使用数量不能大于资产数量')
+  }
+
   const product = await Product.create({
     name: req.body.name,
     img: req.body.img,
