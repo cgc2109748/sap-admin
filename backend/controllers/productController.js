@@ -24,7 +24,11 @@ const createProduct = asyncHandler(async (req, res) => {
     throw new Error('Please add a name field');
   }
 
-  if (Number(req.body.total) - Number(req.body.used) < 0) {
+  const total = Number(req.body.total)
+  const used = Number(req.body.used)
+  const left = total - used
+
+  if ((left) < 0) {
     res.status(400)
     throw new Error('使用数量不能大于资产数量')
   }
@@ -36,11 +40,11 @@ const createProduct = asyncHandler(async (req, res) => {
     type: req.body.type,
     status: req.body.status,
     unit: req.body.unit,
-    total: req.body.total,
+    total: String(total),
     price: req.body.price,
     totalPrice: req.body.totalPrice,
-    used: !_.isEmpty(req.body.used) ? req.body.used : '0',
-    left: req.body.total,
+    used: !_.isEmpty(String(used)) ? used : '0',
+    left: String(req.body.left),
     manager: req.body.manager,
     // createDate: req.body.createDate,
     // updatedDate: req.body.updatedDate,
