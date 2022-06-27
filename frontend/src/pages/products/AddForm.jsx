@@ -59,6 +59,19 @@ const AddForm = (props) => {
       })
       .then((res) => {
         if (res.data.code === 200) {
+          if (values.status === '1') {
+            const left = Number(values?.total) - Number(values?.used)
+            if (left > 0) {
+              values['left'] = left
+            } else {
+              showNotification({
+                title: '资产入库失败：',
+                message: '使用数量不能大于资产数量',
+                color: 'red',
+              });
+              return false
+            }
+          }
           newData({ ...values, ...{ img: res.data.url } });
           setLoading(false);
         }
@@ -80,6 +93,19 @@ const AddForm = (props) => {
         if (!_.isEmpty(file)) {
           upload(values)
         } else {
+          if (values.status === '1') {
+            const left = Number(values?.total) - Number(values?.used)
+            if (left > 0) {
+              values['left'] = left
+            } else {
+              showNotification({
+                title: '资产入库失败：',
+                message: '使用数量不能大于资产数量',
+                color: 'red',
+              });
+              return false
+            }
+          }
           newData(values)
         }
       })}>
