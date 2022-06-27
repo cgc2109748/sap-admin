@@ -45,7 +45,7 @@ const BorrowForm = (props) => {
         <Grid.Col span={12}>
           <NumberInput
             label="借取数量"
-            placeholder="借取数量"
+            placeholder={data?.left}
             {...form.getInputProps('num')}
             min={0}
             max={Number(data.left)}

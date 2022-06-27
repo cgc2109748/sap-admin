@@ -43,7 +43,7 @@ const TakeForm = (props) => {
         <Grid.Col span={12}>
           <NumberInput
             label="领取数量"
-            placeholder="领取数量"
+            placeholder={data?.left}
             {...form.getInputProps('num')}
             min={0}
             max={Number(data.left)}

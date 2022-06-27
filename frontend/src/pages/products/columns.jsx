@@ -142,9 +142,12 @@ const useProductColumns = (createLog, deleteProduct) => {
     },
     {
       name: 'used',
-      header: '使用数量',
-      defaultWidth: 80,
+      header: '使用数量(借取数量)',
+      defaultWidth: 140,
       sortable: false,
+      render: ({value, data}) => {
+        return `${value}(${data?.amountOfBrrow ? data?.amountOfBrrow : 0})`
+      }
     },
     {
       name: 'left',

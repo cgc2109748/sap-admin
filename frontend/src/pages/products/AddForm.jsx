@@ -19,7 +19,6 @@ const AddForm = (props) => {
   const modals = useModals();
   const { groups, newData } = props;
   const [file, setFile] = useState(null);
-  // const [imageUrl, setImageUrl] = useState('');
   const form = useForm({
     initialValues: {
       name: '',
@@ -46,13 +45,6 @@ const AddForm = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   form.setValues({
-  //     ...form.values,
-  //     img: imageUrl,
-  //   });
-  // }, [imageUrl]);
-
   const upload = (values) => {
     if (loading) return;
     setLoading(true);
@@ -67,12 +59,7 @@ const AddForm = (props) => {
       })
       .then((res) => {
         if (res.data.code === 200) {
-          // setImageUrl(res.data.url);
-          // showNotification({
-          //   title: '上传成功！',
-          //   color: 'green',
-          // });
-          newData({...values, ...{img: res.data.url}})
+          newData({ ...values, ...{ img: res.data.url } });
           setLoading(false);
         }
       })
@@ -85,8 +72,6 @@ const AddForm = (props) => {
   const value = {
     file,
     setFile,
-    // imageUrl,
-    // setImageUrl,
   };
 
   return (
@@ -115,7 +100,7 @@ const AddForm = (props) => {
                   const res = await dispatch(queryProductByType({ type: type }));
                   if (!res.error) {
                     let num = '';
-                    switch (String(res.payload.length).length) {
+                    switch (res.payload.length) {
                       case 0:
                         num = '0001';
                         break;
@@ -138,7 +123,9 @@ const AddForm = (props) => {
                     form.setValues({
                       ...form.values,
                       type: type,
-                      code: `${value.slice(0, 2)}${moment().format('YYYY')}${value.slice(2)}${num}`,
+                      code: `${value.slice(0, value.length - 4)}${moment().format('YYYY')}${value.slice(
+                        value.length - 4
+                      )}${num}`,
                     });
                     setLoading(false);
                   } else {
@@ -163,11 +150,27 @@ const AddForm = (props) => {
               data={[
                 { value: '0', label: '闲置' },
                 { value: '1', label: '在用' },
-                { value: '2', label: '缺货' },
+                // { value: '2', label: '缺货' },
               ]}
               {...form.getInputProps('status')}
             />
           </Grid.Col>
+          {form.values?.status === '1' ? (
+            <Grid.Col span={12}>
+              <NumberInput
+                label="使用数量"
+                placeholder="使用数量"
+                min={0}
+                {...form.getInputProps('used')}
+                onChange={(value) => {
+                  form.setValues({
+                    ...form.values,
+                    used: value,
+                  });
+                }}
+              />
+            </Grid.Col>
+          ) : null}
           <Grid.Col span={12}>
             <NumberInput
               label="资产数量"

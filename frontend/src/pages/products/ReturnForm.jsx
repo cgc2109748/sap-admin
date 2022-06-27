@@ -50,7 +50,7 @@ const ReturnForm = (props) => {
         <Grid.Col span={12}>
           <NumberInput
             label="归还数量"
-            placeholder="归还数量"
+            placeholder={data?.amountOfBrrow}
             {...form.getInputProps('num')}
             min={0}
             max={Number(data.amountOfBrrow)}
