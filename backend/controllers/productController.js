@@ -25,7 +25,7 @@ const createProduct = asyncHandler(async (req, res) => {
   }
 
   const total = Number(req.body.total)
-  const used = Number(req.body.used)
+  const used = !_.isNaN(Number(req.body.used)) ? Number(req.body.used) : 0
   const left = total - used
 
   if ((left) < 0) {
