@@ -44,7 +44,7 @@ const createProduct = asyncHandler(async (req, res) => {
     price: req.body.price,
     totalPrice: req.body.totalPrice,
     used: !_.isEmpty(String(used)) ? used : '0',
-    left: String(req.body.left),
+    left: String(req.body.left) === 'undefined' ? left : String(req.body.left),
     manager: req.body.manager,
     // createDate: req.body.createDate,
     // updatedDate: req.body.updatedDate,
