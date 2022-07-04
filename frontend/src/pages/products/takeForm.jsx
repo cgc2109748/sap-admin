@@ -1,5 +1,5 @@
 import { useForm } from '@mantine/form';
-import { TextInput, NumberInput, Grid, Button, Group } from '@mantine/core';
+import { TextInput, NumberInput, Grid, Button, Group, Textarea } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { DatePicker } from '@mantine/dates';
 import _ from 'lodash';
@@ -15,13 +15,15 @@ const TakeForm = (props) => {
       type: '',
       num: '',
       manager: '',
+      usage: '',
+      remark: '',
     },
   });
 
   return (
     <form
       onSubmit={form.onSubmit((values) => {
-        let result = _.pick(data, ['_id', 'name', 'code', 'type', 'used', 'left', 'unit']);
+        let result = _.pick(data, ['_id', 'name', 'code', 'type', 'used', 'left', 'unit', 'usage', 'remark']);
         result.productType = result.type;
         result = { ...result, ...values };
         result.type = '0';
@@ -54,6 +56,12 @@ const TakeForm = (props) => {
         </Grid.Col>
         <Grid.Col span={12}>
           <TextInput label="经办人" placeholder="经办人" {...form.getInputProps('manager')} />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Textarea label="用途" placeholder="用途" {...form.getInputProps('usage')} />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Textarea label="备注" placeholder="备注" {...form.getInputProps('remark')} />
         </Grid.Col>
         <Grid.Col span={12}>
           <DatePicker
