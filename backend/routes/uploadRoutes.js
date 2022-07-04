@@ -30,7 +30,7 @@ router.post('/', upload, (req, res) => {
     console.log('fileUrl:', fileUrl);
     res.status(200).json({
       code: 200,
-      url: `http://218.17.114.111:8000/uploads/${nowDate}_${file.originalname}`,
+      url: `https://zcgl.ibr-x.com/uploads/${nowDate}_${file.originalname}`,
       // url: `${fileUrl}/uploads/${nowDate}_${file.originalname}`,
       message: '上传成功！',
     });
