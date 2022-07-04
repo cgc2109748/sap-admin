@@ -95,7 +95,7 @@ const useProductColumns = (createLog, deleteProduct) => {
                           radius="md"
                           alt="preview"
                           width="100%"
-                          src={``}
+                          src={value}
                           style={{ cursor: 'pointer' }}
                         />
                       </Group>
