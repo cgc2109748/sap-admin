@@ -73,9 +73,6 @@ const useProductColumns = (createLog, deleteProduct) => {
       sortable: false,
       defaultWidth: 60,
       render: ({ value, data }) => {
-        const imgUrl = ''
-        if (value)
-
         return (
           <Group position="center">
             {value && (
