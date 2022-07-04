@@ -4,7 +4,6 @@ const productLogSchema = mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
       required: [true, 'Please add a name value'],
     },
     code: {
@@ -38,6 +37,14 @@ const productLogSchema = mongoose.Schema(
     manager: {
       type: String,
       required: [true, 'Please add a manager value'],
+    },
+    remark: {
+      type: String,
+      required: false
+    },
+    usage: {
+      type: String,
+      required: false
     },
   },
   {

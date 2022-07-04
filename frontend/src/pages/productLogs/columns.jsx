@@ -89,6 +89,18 @@ export const useProductColumns = () => {
       sortable: false,
     },
     {
+      name: 'usage',
+      header: '用途',
+      defaultWidth: 80,
+      sortable: false,
+    },
+    {
+      name: 'remark',
+      header: '备注',
+      defaultWidth: 80,
+      sortable: false,
+    },
+    {
       name: 'manager',
       header: '经办人',
       sortable: false,

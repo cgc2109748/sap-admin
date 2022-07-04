@@ -104,7 +104,7 @@ const Products = () => {
     if (loading) return;
     setLoading(true);
     console.log('data: ', data);
-    const { _id, name, code, type, productType, num, used, left, user, manager, unit, amountOfBrrow, total } = data;
+    const { _id, name, code, type, productType, num, used, left, user, manager, unit, amountOfBorrow, total, usage, remark } = data;
     const logData = {
       name,
       code,
@@ -113,6 +113,8 @@ const Products = () => {
       num,
       user,
       manager,
+      usage,
+      remark,
       createDate: moment().format('YYYY-MM-DD HH:mm:ss'),
       updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
     };
@@ -122,8 +124,8 @@ const Products = () => {
       left,
       updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
     };
-    if (!_.isNaN(parseInt(amountOfBrrow))) {
-      productData.amountOfBrrow = amountOfBrrow;
+    if (!_.isNaN(parseInt(amountOfBorrow))) {
+      productData.amountOfBorrow = amountOfBorrow;
     }
     if (!_.isNaN(parseInt(total))) {
       productData.total = total;

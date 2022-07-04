@@ -1,5 +1,5 @@
 import { useForm } from '@mantine/form';
-import { TextInput, NumberInput, Grid, Button, Group } from '@mantine/core';
+import { TextInput, NumberInput, Grid, Button, Group, Textarea } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { DatePicker } from '@mantine/dates';
 import _ from 'lodash';
@@ -15,21 +15,23 @@ const BorrowForm = (props) => {
       type: '',
       num: '',
       manager: '',
+      usage: '',
+      remark: '',
     },
   });
 
   return (
     <form
       onSubmit={form.onSubmit((values) => {
-        let result = _.pick(data, ['_id', 'name', 'code', 'type', 'used', 'left', 'unit', 'amountOfBrrow']);
+        let result = _.pick(data, ['_id', 'name', 'code', 'type', 'used', 'left', 'unit', 'amountOfBorrow', 'usage', 'remark']);
         result.productType = result.type;
         result = { ...result, ...values };
         result.type = '1';
         if (Number(result.left) - Number(values.num) > 0 || Number(result.left) - Number(values.num) === 0) {
           result.used = Number(result.used) + Number(values.num);
           result.left = Number(result.left) - Number(values.num);
-          result.amountOfBrrow =
-            Number(values.num) + (_.isNaN(Number(data.amountOfBrrow)) ? 0 : Number(data.amountOfBrrow));
+          result.amountOfBorrow =
+            Number(values.num) + (_.isNaN(Number(data.amountOfBorrow)) ? 0 : Number(data.amountOfBorrow));
           console.log('result:', result);
           action(result);
         } else {
@@ -56,6 +58,12 @@ const BorrowForm = (props) => {
         </Grid.Col>
         <Grid.Col span={12}>
           <TextInput label="经办人" placeholder="经办人" {...form.getInputProps('manager')} />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Textarea label="用途" placeholder="用途" {...form.getInputProps('usage')} />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Textarea label="备注" placeholder="备注" {...form.getInputProps('remark')} />
         </Grid.Col>
         <Grid.Col span={12}>
           <DatePicker

@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useState, createContext, useEffect } from 'react';
 import { useForm } from '@mantine/form';
-import { TextInput, NumberInput, Grid, Select, Button, Group, Text } from '@mantine/core';
+import { TextInput, NumberInput, Grid, Select, Button, Group, Text, Textarea } from '@mantine/core';
 import { queryProductByType } from '../../features/product/productSlice';
 import { showNotification } from '@mantine/notifications';
 import { DatePicker } from '@mantine/dates';
@@ -31,6 +31,8 @@ const AddForm = (props) => {
       unit: '',
       manager: '',
       createDate: '',
+      place: '',
+      remark: '',
     },
   });
 
@@ -239,6 +241,12 @@ const AddForm = (props) => {
           </Grid.Col>
           <Grid.Col span={12}>
             <TextInput label="管理人" placeholder="管理人" {...form.getInputProps('manager')} />
+          </Grid.Col>
+          <Grid.Col span={12}>
+            <TextInput label="库存地点" placeholder="库存地点" {...form.getInputProps('place')} />
+          </Grid.Col>
+          <Grid.Col span={12}>
+            <Textarea label="备注" placeholder="备注" {...form.getInputProps('remark')} />
           </Grid.Col>
           <Grid.Col span={12}>
             <DatePicker

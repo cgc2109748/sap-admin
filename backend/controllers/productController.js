@@ -51,6 +51,8 @@ const createProduct = asyncHandler(async (req, res) => {
     createDate: moment().format('YYYY-MM-DD HH:mm:ss'),
     updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
     // qrCode: req.body.qrCode,
+    remark: req.body.remark,
+    place: req.body.place,
   });
 
   res.status(200).json(product);

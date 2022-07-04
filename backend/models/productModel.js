@@ -62,13 +62,21 @@ const productSchema = mongoose.Schema(
       type: String,
       required: false,
     },
-    amountOfBrrow: {
+    amountOfBorrow: {
       type: String,
       required: false,
     },
     _deleted: {
       type: Boolean,
       required: false,
+    },
+    remark: {
+      type: String,
+      required: false
+    },
+    place: {
+      type: String,
+      required: false
     },
   },
   {

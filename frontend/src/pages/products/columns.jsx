@@ -73,6 +73,9 @@ const useProductColumns = (createLog, deleteProduct) => {
       sortable: false,
       defaultWidth: 60,
       render: ({ value, data }) => {
+        const imgUrl = ''
+        if (value)
+
         return (
           <Group position="center">
             {value && (
@@ -95,7 +98,7 @@ const useProductColumns = (createLog, deleteProduct) => {
                           radius="md"
                           alt="preview"
                           width="100%"
-                          src={value}
+                          src={``}
                           style={{ cursor: 'pointer' }}
                         />
                       </Group>
@@ -146,7 +149,7 @@ const useProductColumns = (createLog, deleteProduct) => {
       defaultWidth: 140,
       sortable: false,
       render: ({value, data}) => {
-        return `${value}(${data?.amountOfBrrow ? data?.amountOfBrrow : 0})`
+        return `${value}(${data?.amountOfBorrow ? data?.amountOfBorrow : 0})`
       }
     },
     {
@@ -175,6 +178,18 @@ const useProductColumns = (createLog, deleteProduct) => {
       render: ({ value, data }) => {
         return <Text size="sm">{tranNumber(value, 2)}</Text>;
       },
+    },
+    {
+      name: 'place',
+      header: '存放地点',
+      defaultWidth: 80,
+      sortable: false,
+    },
+    {
+      name: 'remark',
+      header: '备注',
+      defaultWidth: 80,
+      sortable: false,
     },
     {
       name: 'updatedDate',
@@ -286,7 +301,7 @@ const useProductColumns = (createLog, deleteProduct) => {
                 </Button>
               </Grid.Col>
             )}
-            {Number(data.amountOfBrrow) > 0 && (
+            {Number(data.amountOfBorrow) > 0 && (
               <Grid.Col span={4}>
                 <Button
                   size="xs"

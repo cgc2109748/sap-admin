@@ -36,6 +36,8 @@ const setProductLog = asyncHandler(async (req, res) => {
     // updatedDate: req.body.updatedDate,
     createDate: moment().format('YYYY-MM-DD HH:mm:ss'),
     updatedDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+    usage: req.body.usage,
+    remark: req.body.remark,
   });
 
   res.status(200).json(productLog);

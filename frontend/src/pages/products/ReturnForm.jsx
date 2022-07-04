@@ -26,12 +26,12 @@ const ReturnForm = (props) => {
   return (
     <form
       onSubmit={form.onSubmit((values) => {
-        let result = _.pick(data, ['_id', 'name', 'code', 'type', 'used', 'left', 'unit', 'amountOfBrrow']);
+        let result = _.pick(data, ['_id', 'name', 'code', 'type', 'used', 'left', 'unit', 'amountOfBorrow']);
         result.productType = result.type;
         result = { ...result, ...values };
         result.type = '2';
-        if (Number(data.amountOfBrrow) > Number(values.num) || Number(data.amountOfBrrow) === Number(values.num)) {
-          result.amountOfBrrow = Number(data.amountOfBrrow) - Number(values.num);
+        if (Number(data.amountOfBorrow) > Number(values.num) || Number(data.amountOfBorrow) === Number(values.num)) {
+          result.amountOfBorrow = Number(data.amountOfBorrow) - Number(values.num);
           result.used = Number(result.used) - Number(values.num);
           result.left = Number(result.left) + Number(values.num);
         } else {
@@ -50,10 +50,10 @@ const ReturnForm = (props) => {
         <Grid.Col span={12}>
           <NumberInput
             label="归还数量"
-            placeholder={data?.amountOfBrrow}
+            placeholder={data?.amountOfBorrow}
             {...form.getInputProps('num')}
             min={0}
-            max={Number(data.amountOfBrrow)}
+            max={Number(data.amountOfBorrow)}
           />
         </Grid.Col>
         <Grid.Col span={12}>
